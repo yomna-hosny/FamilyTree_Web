@@ -1,0 +1,517 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+
+        <ul class="list-unstyled components">
+            <li>
+                <a data-toggle="modal" data-target="#exampleModa2">Add New Family</a>
+            </li>
+            <br />
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Select Your Family</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    @foreach (var item in ViewBag.Families)
+                    {
+                        <li>
+                            <a href="/Home/SelectFamily/@item.Id">@item.Name</a>
+                        </li>
+                    }
+                </ul>
+            </li>
+            <li>
+
+                <div class="members">
+                    <h3>Members :</h3>
+                    <a class="Addmember" data-toggle="modal" data-target="#exampleModal">Add Member</a>
+                </div>
+
+                <div class="ex3">
+                    @foreach (var item in ViewBag.FamilyMembers)
+                    {
+                        string Mgender;
+                        int Mage = DateTime.Now.Year - item.DateOfBirth.Year;
+                        if (item.Gender)
+                        {
+                            Mgender = "Female";
+                        }
+                        else
+                        {
+                            Mgender = "Male";
+                        }
+                        <a href="/Home/Click/@item.Id">
+
+                            <div class="id-card-small">
+                                <div class="profile-row-small">
+                                    <div class="dp">
+                                        <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                    </div>
+                                    <div class="desc-side">
+                                        <h1>@item.FirstName @item.LastName</h1>
+                                        <p>Gender : @Mgender</p>
+                                        <p>Age : @Mage</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                    }
+
+                </div>
+            </li>
+
+        </ul>
+
+
+    </nav>
+
+    <!-- Page Content  -->
+    <div class="container body-content">
+
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div>
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+
+                </div>
+            </nav>
+            @if (TempData["invalid"] != null && (bool)TempData["invalid"] == true)
+            {
+                <div class="d-flex justify-content-center">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-error">
+                        <div class="row">
+                            <div class="col-9">
+                                <i class="fa fa-exclamation-circle mr-3"></i>
+                                <div asp-validation-summary="All" id="error" class="invalid-login"></div>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="close ml-5" onclick="$('#alert-error').fadeOut()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="id-card">
+
+                @if (ViewBag.selectedMember != null)
+                {
+                    string sgender;
+                    int sage = DateTime.Now.Year - ViewBag.selectedMember.DateOfBirth.Year;
+                    if (ViewBag.selectedMember.Gender)
+                    {
+                        sgender = "Female";
+                    }
+                    else
+                    {
+                        sgender = "Male";
+                    }
+
+                    <div class="profile-row">
+
+                        <div class="dp">
+                            <div class="dp-arc-outer"></div>
+                            <div class="dp-arc-inner"></div>
+                            <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                        </div>
+                        <div class="desc">
+                            <a class="Edit" style="cursor: pointer">
+                                <i class='fas fa-edit' style='font-size:36px;color:#557571' data-toggle="modal" data-target="#exampleModa3"></i>
+                            </a>
+                            <h1>@ViewBag.selectedMember.FirstName @ViewBag.selectedMember.LastName</h1>
+                            <p>Gender : @sgender</p>
+                            <p>Age : @sage</p>
+                            <ul class="list-unstyled CTAs">
+                                <li style="cursor: pointer">
+                                    <a data-toggle="modal" data-target="#exampleModa4" class="article ">Add Relation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <br />
+
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Mother</h2>
+                    <hr />
+                    <div class="id-card-small">
+                        @if (ViewBag.Mother != null)
+                        {
+                            string Mgender;
+                            int Mage = DateTime.Now.Year - ViewBag.Mother.DateOfBirth.Year;
+                            if (ViewBag.Mother.Gender)
+                            {
+                                Mgender = "Female";
+                            }
+                            else
+                            {
+                                Mgender = "Male";
+                            }
+                            <a href="/Home/Click/@ViewBag.Mother.Id">
+                                <div class="profile-row-small">
+                                    <div class="dp">
+                                        <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                    </div>
+                                    <div class="desc">
+                                        <h1>@ViewBag.Mother.FirstName @ViewBag.Mother.LastName</h1>
+                                        <p>Gender : @Mgender</p>
+                                        <p>Age : @Mage</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <h2>Father</h2>
+                    <hr />
+                    <div class="id-card-small">
+                        @if (ViewBag.Father != null)
+                        {
+                            string Fgender;
+                            int Fage = DateTime.Now.Year - ViewBag.Father.DateOfBirth.Year;
+                            if (ViewBag.Father.Gender)
+                            {
+                                Fgender = "Female";
+                            }
+                            else
+                            {
+                                Fgender = "Male";
+                            }
+                            <a href="/Home/Click/@ViewBag.Father.Id">
+
+                                <div class="profile-row-small">
+                                    <div class="dp">
+                                        <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                    </div>
+                                    <div class="desc">
+                                        <h1>@ViewBag.Father.FirstName @ViewBag.Father.LastName</h1>
+                                        <p>Gender : @Fgender</p>
+                                        <p>Age : @Fage</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <h2>Partner</h2>
+                    <hr />
+                    <div class="id-card-small">
+
+                        @if (ViewBag.Partner != null)
+                        {
+                            string Pgender;
+                            int Page = DateTime.Now.Year - ViewBag.Partner.DateOfBirth.Year;
+                            if (ViewBag.Partner.Gender)
+                            {
+                                Pgender = "Female";
+                            }
+                            else
+                            {
+                                Pgender = "Male";
+                            }
+                            <a href="/Home/Click/@ViewBag.Partner.Id">
+
+                                <div class="profile-row-small">
+                                    <div class="dp">
+                                        <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                    </div>
+                                    <div class="desc">
+                                        <h1>@ViewBag.Partner.FirstName @ViewBag.Partner.LastName</h1>
+                                        <p>Gender : @Pgender</p>
+                                        <p>Age : @Page</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Childs</h2>
+                    <hr />
+                    <div class="ex4">
+                        @if (ViewBag.childs != null)
+                        {
+                            foreach (var item in ViewBag.childs)
+                            {
+                                string Cgender;
+                                int Cage = DateTime.Now.Year - item.DateOfBirth.Year;
+                                if (item.Gender)
+                                {
+                                    Cgender = "Female";
+                                }
+                                else
+                                {
+                                    Cgender = "Male";
+                                }
+                                <a href="/Home/Click/@item.Id">
+
+                                    <div class="id-card-small">
+                                        <div class="profile-row-small">
+                                            <div class="dp">
+                                                <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                            </div>
+                                            <div class="desc">
+                                                <h1>@item.FirstName @item.LastName</h1>
+                                                <p>Gender : @Cgender</p>
+                                                <p>Age : @Cage</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-4 ">
+                    <h2>Siblings</h2>
+                    <hr />
+                    <div class="ex4">
+                        @if (ViewBag.Sibling != null)
+                        {
+
+                            foreach (var item in ViewBag.Sibling)
+                            {
+                                string Siblingender;
+                                int Siblingage = DateTime.Now.Year - item.DateOfBirth.Year;
+                                if (item.Gender)
+                                {
+                                    Siblingender = "Female";
+                                }
+                                else
+                                {
+                                    Siblingender = "Male";
+                                }
+                                <a href="/Home/Click/@item.Id">
+
+                                    <div class="id-card-small">
+                                        <div class="profile-row-small">
+                                            <div class="dp">
+                                                <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                            </div>
+                                            <div class="desc">
+                                                <h1>@item.FirstName @item.LastName</h1>
+                                                <p>Gender : @Siblingender</p>
+                                                <p>Age : @Siblingage</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-4 ">
+                    <h2>others</h2>
+                    <hr />
+                    <div class="ex4">
+                        @if (ViewBag.otherRelatoins != null)
+                        {
+
+                            foreach (var item in ViewBag.otherRelatoins)
+                            {
+                                string ORgender;
+                                int ORage = DateTime.Now.Year - item.DateOfBirth.Year;
+                                if (item.Gender)
+                                {
+                                    ORgender = "Female";
+                                }
+                                else
+                                {
+                                    ORgender = "Male";
+                                }
+                                <a href="/Home/Click/@item.Id">
+
+                                    <div class="id-card-small">
+                                        <div class="profile-row-small">
+                                            <div class="dp">
+                                                <img src="~/Resources/blank-profile-picture-973460_640.png" />
+                                            </div>
+                                            <div class="desc">
+                                                <h1>@item.FirstName @item.LastName</h1>
+                                                <p>Gender : @ORgender</p>
+                                                <p>Age : @ORage</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <form method="post" action="/Home/AddMember" class="box">
+                            <input type="button" class="btn btn-secondary" data-dismiss="modal" value="X" style="float: right;" />
+
+                            <h1>Add New Member</h1>
+                            <input type="text" name="FirstName" placeholder="FirstName">
+
+                            <input type="text" name="LastName" placeholder="LastName">
+                            <input type="datetime-local" name="DOB">
+                            <h3>Gender</h3>
+                            <div> <h4 style="display:inline">Female : </h4><input type="radio" name="gender" value="true"></div>
+                            <div> <h4 style="display:inline"> Male : </h4><input type="radio" name="gender" value="false"></div>
+                            <input type="submit" value="Add">
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModa2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <form method="post" action="/Home/AddFamily" class="box">
+                            <input type="button" class="btn btn-secondary" data-dismiss="modal" value="X" style="float:right;" />
+
+                            <h1>Add New Family</h1>
+                            <input type="text" name="Name" placeholder="Family Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+
+                            <input type="text" name="Comment" placeholder="Comment">
+                            <input type="submit" value="Add">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModa3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <form method="post" action="/Home/EditMember" class="box" >
+                            <input type="button" class="btn btn-secondary" data-dismiss="modal" value="X" style="float: right;" />
+
+                            <h1>Edit Member</h1>
+                            <input type="text" name="FirstName" value="@ViewBag.selectedMember.FirstName">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                            <input type="text" name="LastName" value="@ViewBag.selectedMember.LastName">
+                            <input type="datetime-local" name="DOB" value="@ViewBag.selectedMember.DateOfBirth">
+                            <h3>Gender</h3>
+                            @if (@ViewBag.selectedMember.Gender)
+                            {
+                                <div> <h4 style="display:inline">Female : </h4><input type="radio" style="display:inline" name="gender" value="true" checked="checked"></div>
+                                <div> <h4 style="display:inline"> Male : </h4><input type="radio" name="gender" value="false"></div>
+                            }
+                            else
+                            {
+                                <div> <h4 style="display:inline">Female : </h4><input type="radio" name="gender" value="true"></div>
+                                <div> <h4 style="display:inline"> Male : </h4><input type="radio" name="gender" value="false"  checked="checked"></div>
+                            }
+                           
+                            <input type="submit" value="Update">
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModa4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <form method="post" action="/Home/AddRelation" class="box">
+                            <input type="button" class="btn btn-secondary" data-dismiss="modal" value="X" style="float:right;" />
+
+                            <h1>Add New Relation</h1>
+                            <br />
+                            <div>
+                                <h4 style="display:inline">Choose Member : </h4>
+                                <select class="custom-select" name="MemberId">
+                                    <option selected>Choose Member</option>
+                                    @foreach (var item in @ViewBag.ComboMembers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+
+                                    }
+                                </select>
+                            </div>
+                            <br />
+                            <div> <h4 style="display:inline"> Choose Relation Type : </h4>
+                                  <select class="custom-select" name="TypeId">
+                                      <option selected>Choose Relation Type</option>
+                                      @foreach (var item in @ViewBag.ComboTypes)
+                                      {
+                                          <option value="@item.Value">@item.Text</option>
+
+                                      }
+                                  </select>                            </div>
+                            <input type="submit" value="Add">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
